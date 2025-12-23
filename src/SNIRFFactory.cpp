@@ -3,14 +3,17 @@
 #include "HighFive/HighFive.hpp"
 #include "HighFive/H5File.hpp"
 
+namespace SNIRFCPP {
+	bool SNIRFFactory::CreateSNIRF(SNIRF& out_snirf, const std::filesystem::path& filepath, SNIRFType type, std::vector<SNIRFError>& out_errors)
+	{
+		if (!std::filesystem::exists(filepath)) {
+			out_errors.emplace_back(SNIRFError::FILE_NOT_FOUND, "File not found");
 
-bool SNIRFFactory::CreateSNIRF(SNIRF& out_snirf, const std::filesystem::path& filepath, SNIRFType type, std::vector<SNIRFError>& out_errors)
-{
-	if (!std::filesystem::exists(filepath)) {
-		out_errors.emplace_back(SNIRFError::FILE_NOT_FOUND, "File not found");
+			return false;
+		}
 
-		return false;
+		return true;
 	}
 
-	return true;
 }
+
