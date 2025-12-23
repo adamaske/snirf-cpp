@@ -1,2 +1,2 @@
-#include "snirf.h"
+#include "snirf/snirf.h"
 
