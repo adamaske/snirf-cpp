@@ -114,9 +114,18 @@ if(SNIRF_BUILD_DEV_EXECUTABLE)
     target_link_libraries(snirf_dev PRIVATE snirf)
 endif()
 
+#if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+#    message(STATUS "Building in standalone mode.")
+#    add_executable(snirf-cpp tests/snirf_test.cpp)
+#    target_link_libraries(snirf-cpp PRIVATE snirf)
+#else()
+#    message(STATUS "Building as part of a larger project.")
+#endif()
+
 # ============================================
 # Examples (optional)
 # ============================================
 if(SNIRF_BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif()
+

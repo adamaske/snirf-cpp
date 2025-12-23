@@ -11,9 +11,9 @@ struct SNIRFError{
 		UNKNOWN_ERROR
 	};
 
-	SNIRFError(Code code = NONE, const char* message = "")
+	SNIRFError(Code code = NONE, const std::string& message = "")
 		: code(code), message(message) {}
 
 	Code code;
-	const char* message;
+	std::string message;
 };

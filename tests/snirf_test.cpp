@@ -19,6 +19,7 @@ TEST_F(SNIRFTest, ExampleTest) {
 }
 
 #else
+
 // Development executable version - for manual testing during development
 #include <iostream>
 #include <snirf/SNIRFFactory.h>

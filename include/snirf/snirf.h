@@ -1,9 +1,16 @@
 #pragma once
 
+#include <vector>
+
+#include "SNIRFError.h"
 
 struct SNIRF {
-	int version;
-	int numDataPoints;
-	int numTimePoints;
-	float* data; // Pointer to the data array
+	using ChannelDataPointType = double;
+
+	std::vector<ChannelDataPointType> singular_channel_data;
+
+
+
+	// This can store any errors which occur 
+	std::vector<SNIRFError> errors;
 };
