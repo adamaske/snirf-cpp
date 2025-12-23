@@ -7,16 +7,27 @@ project(snirfcpp VERSION 1.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Determine if this is a standalone build
+if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+    set(SNIRF_STANDALONE ON)
+else()
+    set(SNIRF_STANDALONE OFF)
+endif()
+
 # Options
 option(SNIRF_BUILD_TESTS "Build tests" OFF)
 option(SNIRF_BUILD_EXAMPLES "Build examples" OFF)
+option(SNIRF_BUILD_DEV_EXECUTABLE "Build development executable" ${SNIRF_STANDALONE})
 
 # Define the static library
 add_library(snirf STATIC
     "src/snirf.cpp"
     "include/snirf/snirf.h"
     "include/snirf/SNIRFFactory.h"
- "include/snirf/snirftype.h" "src/SNIRFFactory.cpp" "include/snirf/utils.h")
+    "include/snirf/snirftype.h"
+    "src/SNIRFFactory.cpp"
+    "include/snirf/utils.h"
+ "include/snirf/SNIRFError.h")
 
 # Include directories
 target_include_directories(snirf
@@ -27,9 +38,15 @@ target_include_directories(snirf
         ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-# SNIRF files are HDF5-based, so you likely need this
 find_package(HDF5 REQUIRED COMPONENTS CXX)
-target_link_libraries(snirf PUBLIC HDF5::HDF5)
+
+set(HIGHFIVE_FIND_HDF5 OFF CACHE BOOL "" FORCE)  # We already found HDF5
+set(HIGHFIVE_UNIT_TESTS OFF CACHE BOOL "" FORCE)  # Don't build tests
+set(HIGHFIVE_EXAMPLES OFF CACHE BOOL "" FORCE)    # Don't build examples
+set(HIGHFIVE_BUILD_DOCS OFF CACHE BOOL "" FORCE)  # Don't build docs
+add_subdirectory(vendor/HighFive)
+
+target_link_libraries(snirf PUBLIC HDF5::HDF5 HighFive)
 
 # Compiler warnings (optional but recommended)
 target_compile_options(snirf PRIVATE
@@ -87,6 +104,14 @@ install(FILES
 if(SNIRF_BUILD_TESTS)
     enable_testing()
     add_subdirectory(tests)
+endif()
+
+# ============================================
+# Development Executable (optional)
+# ============================================
+if(SNIRF_BUILD_DEV_EXECUTABLE)
+    add_executable(snirf_dev tests/snirf_test.cpp)
+    target_link_libraries(snirf_dev PRIVATE snirf)
 endif()
 
 # ============================================

@@ -1,13 +1,16 @@
 #include "snirf/SNIRFFactory.h"
 
+#include "HighFive/HighFive.hpp"
+#include "HighFive/H5File.hpp"
 
-SNIRF SNIRFFactory::CreateSNIRF(SNIRFType type)
+
+bool SNIRFFactory::CreateSNIRF(SNIRF& out_snirf, const std::filesystem::path& filepath, SNIRFType type, std::vector<SNIRFError>& out_errors)
 {
-	// TODO : We ignore type for now.
+	if (!std::filesystem::exists(filepath)) {
+		out_errors.emplace_back(SNIRFError::FILE_NOT_FOUND, "File not found");
 
-	SNIRF snirf;
+		return false;
+	}
 
-
-
-	return snirf;
+	return true;
 }
