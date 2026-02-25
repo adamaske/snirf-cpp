@@ -1,2 +1,0 @@
-#include "snirf/snirf.h"
-
